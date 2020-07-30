@@ -39,3 +39,5 @@ Two options for running jobs, either add an EMR Spark Step which calls `spark-su
 
 I've been favouring the notebook because it's easier for trial and error, but submitting a step would probably be a better long term solution.
 
+**Note:** I've been having problems loading the `analyze_sentimentdl_use_twitter` pipeline, it works in local mode for analysis a single string, but won't work across a cluster due to a TensorFlow problem. This could be a memory issue or could be a versioning issue, I haven't had a chance to solve it. Instead I've been using the simpler `analyze_sentiment` model, which is not trained on tweets.
+
