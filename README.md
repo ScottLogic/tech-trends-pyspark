@@ -9,6 +9,7 @@ Requirements:
 - Install dependencies in a command window - `pip install boto3 tweepy`
 - Register for a dev account on Twitter to get API keys, there are 2 sets consumer key/secret and auth key/secret.
 - Store API Keys in ENV properties (Env names can be seen near the top of the script)
+- Download the AWS CLI and run `aws configure` to setup authentication
 - Run the script `python ./twitter-streamer.py`
 - Check the kineses console/dashboard to see if things are written to the stream
 
