@@ -13,18 +13,29 @@ asecret = os.environ.get('TWITTER_SECRET_KEY')
 
 kinesis = boto3.client('kinesis')
 
+
+def getTweetText(status):
+    try:
+        return status.extended_tweet['full_text']
+    except AttributeError:
+        return status.text
+
+
 class SparkListener(StreamListener):
 
     def on_status(self, status):
+        if status.retweeted or 'RT @' in status.text:
+            return
+
         hashtag_entities = status.entities['hashtags']
         hashtags = list(map(lambda e: e['text'], hashtag_entities))
 
-        output = {'text': status.text, 'hashtags': hashtags}
+        output = {'text': getTweetText(status), 'hashtags': hashtags}
         try:
             kinesis.put_record(StreamName='tech-trends-stream',
                                Data=json.dumps(output),
-                               PartitionKey=output['text'])
-            print("Put word into stream")
+                               PartitionKey=status.text)
+            print("Put tweet into stream: " + output['text'])
         except Exception as e:
             print("Error writing to Kinesis" + str(e))
 
@@ -35,5 +46,9 @@ class SparkListener(StreamListener):
 auth = OAuthHandler(ckey, csecret)
 auth.set_access_token(atoken, asecret)
 
-twitterStream = Stream(auth, SparkListener())
-twitterStream.filter(track=["python"])
+twitterStream = Stream(auth, SparkListener(), tweet_mode='extended')
+twitterStream.filter(track=[
+    "#Python", "#C#", "#Java", "#Javascript", "#Rust",
+    "#Scala", "#GoLang", '#angularjs', '#reactjs'
+],
+    languages=["en"])
