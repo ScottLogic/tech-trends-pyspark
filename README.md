@@ -27,7 +27,7 @@ EMR provides a cluster configuration ('Software Settings') option from which you
 
 ### Python
 
-Python dependencies are installed using pip/conda, which is most easily done using a bootstrap script which is run on all nodes. This is stored in the S3 bucker `tech-trends-emr-config`. Otherwise you can install packages in a notebook using `sc.install_package_pypi("spark-nlp")`
+Python dependencies are installed using pip/conda, which is most easily done using a bootstrap script which is run on all nodes (as described [here](https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-jupyterhub-install-kernels-libs.html) under 'Using Libraries and Installing Additional Libraries', but not working for me). This is stored in the S3 bucker `tech-trends-emr-config`. Otherwise you can install packages in a notebook using `sc.install_package_pypi("spark-nlp")`
 
 ### Spark Cluster Settings
 
